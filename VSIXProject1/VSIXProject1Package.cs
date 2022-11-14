@@ -4,7 +4,6 @@ using Microsoft.VisualStudio.Shell.Interop;
 using System;
 using System.Runtime.InteropServices;
 using System.Threading;
-using Microsoft.VisualStudio.Shell.Events;
 using Task = System.Threading.Tasks.Task;
 using static Microsoft.VisualStudio.VSConstants;
 using Microsoft;
