@@ -22,13 +22,67 @@
 
   <!--The Commands section is where commands, menus, and menu groups are defined.
       This section uses a Guid to identify the package that provides the command defined inside it. -->
-  
+  <Commands package="guidVSIXProject1Package">
+    <!-- Inside this section we have different sub-sections: one for the menus, another
+    for the menu groups, one for the buttons (the actual commands), one for the combos
+    and the last one for the bitmaps used. Each element is identified by a command id that
+    is a unique pair of guid and numeric identifier; the guid part of the identifier is usually
+    called "command set" and is used to group different command inside a logically related
+    group; your package should define its own command set in order to avoid collisions
+    with command ids defined by other packages. -->
+
+    <!-- In this section you can define new menu groups. A menu group is a container for
+         other menus or buttons (commands); from a visual point of view you can see the
+         group as the part of a menu contained between two lines. The parent of a group
+         must be a menu. -->
+    <Groups>
+      <Group guid="guidVSIXProject1PackageCmdSet" id="MyMenuGroup" priority="0x0600">
+        <Parent guid="guidSHLMainMenu" id="IDM_VS_MENU_TOOLS"/>
+      </Group>
+    </Groups>
+
+    <!--Buttons section. -->
+    <!--This section defines the elements the user can interact with, like a menu command or a button
+        or combo box in a toolbar. -->
+    <Buttons>
+      <!--To define a menu group you have to specify its ID, the parent menu and its display priority.
+          The command is visible and enabled by default. If you need to change the visibility, status, etc, you can use
+          the CommandFlag node.
+          You can add more than one CommandFlag node e.g.:
+              <CommandFlag>DefaultInvisible</CommandFlag>
+              <CommandFlag>DynamicVisibility</CommandFlag>
+          If you do not want an image next to your command, remove the Icon node /> -->
+      <Button guid="guidVSIXProject1PackageCmdSet" id="EventsTrackingControlCommandId" priority="0x0100" type="Button">
+        <Parent guid="guidVSIXProject1PackageCmdSet" id="MyMenuGroup" />
+        <Icon guid="guidImages" id="bmpPicArrows" />
+        <Strings>
+          <ButtonText>Solution events tracking toggle</ButtonText>
+        </Strings>
+      </Button>
+    </Buttons>
+
+    <!--The bitmaps section is used to define the bitmaps that are used for the commands.-->
+    <Bitmaps>
+      <!--  The bitmap id is defined in a way that is a little bit different from the others:
+            the declaration starts with a guid for the bitmap strip, then there is the resource id of the
+            bitmap strip containing the bitmaps and then there are the numeric ids of the elements used
+            inside a button definition. An important aspect of this declaration is that the element id
+            must be the actual index (1-based) of the bitmap inside the bitmap strip. -->
+      <Bitmap guid="guidImages" href="Resources\EventsTrackingControlCommand.png" usedList="bmpPic1, bmpPic2, bmpPicSearch, bmpPicX, bmpPicArrows, bmpPicStrikethrough"/>
+    </Bitmaps>
+  </Commands>
+
   <Symbols>
     <!-- This is the package guid. -->
     <GuidSymbol name="guidVSIXProject1Package" value="{4957da3a-6252-4bbf-acc1-17c1c80577f9}" />
 
+    <!-- This is the guid used to group the menu commands together -->
+    <GuidSymbol name="guidVSIXProject1PackageCmdSet" value="{142bfb60-7c3b-4734-87c7-d5feb56121df}">
+      <IDSymbol name="MyMenuGroup" value="0x1020" />
+      <IDSymbol name="EventsTrackingControlCommandId" value="0x0100" />
+    </GuidSymbol>
 
-    <GuidSymbol name="guidImages" value="{64eb4b06-b95d-4cb5-9cf0-057e7f3530d7}" >
+    <GuidSymbol name="guidImages" value="{17bd7f1c-3da9-4830-b665-96e3e9ebea52}" >
       <IDSymbol name="bmpPic1" value="1" />
       <IDSymbol name="bmpPic2" value="2" />
       <IDSymbol name="bmpPicSearch" value="3" />

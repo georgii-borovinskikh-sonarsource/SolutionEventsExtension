@@ -8,7 +8,7 @@ using Task = System.Threading.Tasks.Task;
 using static Microsoft.VisualStudio.VSConstants;
 using Microsoft;
 
-namespace VSIXProject1
+namespace SolutionEventsExtension
 {
     /// <summary>
     /// This is the class that implements the package exposed by this assembly.
@@ -28,19 +28,17 @@ namespace VSIXProject1
     /// </para>
     /// </remarks>
     [PackageRegistration(UseManagedResourcesOnly = true, AllowsBackgroundLoading = true)]
-    [Guid(VSIXProject1Package.PackageGuidString)]
-    [ProvideAutoLoad(VSConstants.UICONTEXT.SolutionOpening_string, PackageAutoLoadFlags.BackgroundLoad)]
-    public sealed class VSIXProject1Package : AsyncPackage, IDisposable
+    [Guid(PackageGuidString)]
+    // [ProvideAutoLoad(VSConstants.UICONTEXT.SolutionOpening_string, PackageAutoLoadFlags.BackgroundLoad)]
+    [ProvideMenuResource("Menus.ctmenu", 1)]
+    public sealed class SolutionEventsExtension : AsyncPackage
     {
         private IVsOutputWindowPane vsOutputWindowPane;
 
         /// <summary>
-        /// VSIXProject1Package GUID string.
+        /// SolutionEventsExtension GUID string.
         /// </summary>
         public const string PackageGuidString = "4957da3a-6252-4bbf-acc1-17c1c80577f9";
-
-        private uint cookie = VSConstants.VSCOOKIE_NIL;
-        private IVsSolution solution;
 
         #region Package Members
 
@@ -51,45 +49,21 @@ namespace VSIXProject1
         /// <param name="cancellationToken">A cancellation token to monitor for initialization cancellation, which can occur when VS is shutting down.</param>
         /// <param name="progress">A provider for progress updates.</param>
         /// <returns>A task representing the async work of package initialization, or an already completed task if there is none. Do not return null from this method.</returns>
-        protected override async Task InitializeAsync(CancellationToken cancellationToken, IProgress<ServiceProgressData> progress)
+        protected override async Task InitializeAsync(CancellationToken cancellationToken,
+            IProgress<ServiceProgressData> progress)
         {
             // When initialized asynchronously, the current thread may be a background thread at this point.
             // Do any initialization that requires the UI thread after switching to the UI thread.
-            await this.JoinableTaskFactory.SwitchToMainThreadAsync(cancellationToken);
+            await JoinableTaskFactory.SwitchToMainThreadAsync(cancellationToken);
 
-            vsOutputWindowPane = (IVsOutputWindowPane) await GetServiceAsync(typeof(SVsGeneralOutputWindowPane));
+            vsOutputWindowPane = (IVsOutputWindowPane)await GetServiceAsync(typeof(SVsGeneralOutputWindowPane));
             Assumes.Present(vsOutputWindowPane);
-            solution = (IVsSolution) await GetServiceAsync(typeof(SVsSolution));
+            var solution = (IVsSolution)await GetServiceAsync(typeof(SVsSolution));
             Assumes.Present(solution);
-            solution.AdviseSolutionEvents(new EventsHandler(vsOutputWindowPane), out cookie);
-
-            //SolutionEvents.OnAfterRenameProject += (sender, args) => args.Hierarchy.;
-            //SolutionEvents.OnAfterAsynchOpenProject += (sender, args) => PrintEventMessage("Opened project");
-            //SolutionEvents.OnAfterChangeProjectParent += (sender, args) => PrintEventMessage("Moved project");
-            //SolutionEvents.OnAfterCloseFolder += (sender, args) => PrintEventMessage("Folder closed");
-            //SolutionEvents.OnAfterCloseSolution += (sender, args) => PrintEventMessage("Solution closed");
-            //SolutionEvents.OnAfterClosingChildren += (sender, args) => PrintEventMessage("Nested projects closed");
-            //SolutionEvents.OnAfterLoadAllDeferredProjects += (sender, args) => PrintEventMessage("Deferred projects loaded"); // not supported in vs22
-            //SolutionEvents.OnAfterLoadProject += (sender, args) => PrintEventMessage("Project loaded");
-            //SolutionEvents.OnAfterMergeSolution += (sender, args) => PrintEventMessage("Merged solution");
-            //SolutionEvents.OnAfterOpenFolder += (sender, args) => PrintEventMessage("Folder opened");
-            //SolutionEvents.OnAfterOpenProject += (sender, args) => PrintEventMessage("Project opened");
-            //SolutionEvents.OnAfterOpenSolution += (sender, args) => PrintEventMessage("Solution opened");
-            //SolutionEvents.OnAfterOpeningChildren += (sender, args) => PrintEventMessage("Children opened");
-
-
+            var eventsHandler = new EventsHandler(solution, vsOutputWindowPane);
+            await VSIXProject1.EventsTrackingControlCommand.InitializeAsync(this, eventsHandler);
         }
 
         #endregion
-
-        public void Dispose()
-        {
-            if (cookie != VSCOOKIE_NIL)
-            {
-                solution.UnadviseSolutionEvents(cookie);
-                solution = null;
-                cookie = VSCOOKIE_NIL;
-            }
-        }
     }
 }
