@@ -45,7 +45,6 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="EventsTrackingToggle.cs" />
     <Compile Include="EventsHandler.cs" />
     <Compile Include="EventsTrackingControlCommand.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
