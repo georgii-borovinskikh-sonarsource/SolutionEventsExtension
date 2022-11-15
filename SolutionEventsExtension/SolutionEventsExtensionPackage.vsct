@@ -22,7 +22,7 @@
 
   <!--The Commands section is where commands, menus, and menu groups are defined.
       This section uses a Guid to identify the package that provides the command defined inside it. -->
-  <Commands package="guidVSIXProject1Package">
+  <Commands package="guidSolutionEventsExtensionPackage">
     <!-- Inside this section we have different sub-sections: one for the menus, another
     for the menu groups, one for the buttons (the actual commands), one for the combos
     and the last one for the bitmaps used. Each element is identified by a command id that
@@ -36,7 +36,7 @@
          group as the part of a menu contained between two lines. The parent of a group
          must be a menu. -->
     <Groups>
-      <Group guid="guidVSIXProject1PackageCmdSet" id="MyMenuGroup" priority="0x0600">
+      <Group guid="guidSolutionEventsExtensionPackageCmdSet" id="MyMenuGroup" priority="0x0600">
         <Parent guid="guidSHLMainMenu" id="IDM_VS_TOOL_STANDARD"/>
       </Group>
     </Groups>
@@ -52,11 +52,12 @@
               <CommandFlag>DefaultInvisible</CommandFlag>
               <CommandFlag>DynamicVisibility</CommandFlag>
           If you do not want an image next to your command, remove the Icon node /> -->
-      <Button guid="guidVSIXProject1PackageCmdSet" id="EventsTrackingControlCommandId" priority="0x0100" type="Button">
-        <Parent guid="guidVSIXProject1PackageCmdSet" id="MyMenuGroup" />
+      <Button guid="guidSolutionEventsExtensionPackageCmdSet" id="EventsTrackingControlCommandId" priority="0x0100" type="Button">
+        <Parent guid="guidSolutionEventsExtensionPackageCmdSet" id="MyMenuGroup" />
         <Icon guid="guidImages" id="bmpPicArrows" />
+		  <CommandFlag>TextChanges</CommandFlag>
         <Strings>
-          <ButtonText>Solution events tracking toggle</ButtonText>
+	        <ButtonText>Enable solution events tracking</ButtonText>
         </Strings>
       </Button>
     </Buttons>
@@ -74,10 +75,10 @@
 
   <Symbols>
     <!-- This is the package guid. -->
-    <GuidSymbol name="guidVSIXProject1Package" value="{4957da3a-6252-4bbf-acc1-17c1c80577f9}" />
+    <GuidSymbol name="guidSolutionEventsExtensionPackage" value="{4957da3a-6252-4bbf-acc1-17c1c80577f9}" />
 
     <!-- This is the guid used to group the menu commands together -->
-    <GuidSymbol name="guidVSIXProject1PackageCmdSet" value="{142bfb60-7c3b-4734-87c7-d5feb56121df}">
+    <GuidSymbol name="guidSolutionEventsExtensionPackageCmdSet" value="{142bfb60-7c3b-4734-87c7-d5feb56121df}">
       <IDSymbol name="MyMenuGroup" value="0x1020" />
       <IDSymbol name="EventsTrackingControlCommandId" value="0x0100" />
     </GuidSymbol>

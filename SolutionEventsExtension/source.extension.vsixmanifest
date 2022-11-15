@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PackageManifest Version="2.0.0" xmlns="http://schemas.microsoft.com/developer/vsx-schema/2011" xmlns:d="http://schemas.microsoft.com/developer/vsx-schema-design/2011">
   <Metadata>
-    <Identity Id="VSIXProject1.8b344db9-30c4-4873-a34c-fd3667c35362" Version="1.0" Language="en-US" Publisher="Company" />
-    <DisplayName>VSIXProject1</DisplayName>
+    <Identity Id="SolutionEventsExtension.8b344db9-30c4-4873-a34c-fd3667c35362" Version="1.0" Language="en-US" Publisher="Company" />
+    <DisplayName>SolutionEventsExtension</DisplayName>
     <Description>Empty VSIX Project.</Description>
   </Metadata>
   <Installation>

@@ -5,6 +5,7 @@ using System.ComponentModel.Design;
 using System.Globalization;
 using System.Threading;
 using System.Threading.Tasks;
+using Microsoft;
 using SolutionEventsExtension;
 using Task = System.Threading.Tasks.Task;
 
@@ -39,13 +40,15 @@ namespace VSIXProject1
         /// </summary>
         /// <param name="package">Owner package, not null.</param>
         /// <param name="commandService">Command service to add command to, not null.</param>
-        private EventsTrackingControlCommand(AsyncPackage package, OleMenuCommandService commandService, EventsHandler eventsHandler)
+        private EventsTrackingControlCommand(AsyncPackage package, OleMenuCommandService commandService,
+            EventsHandler eventsHandler)
         {
             this.package = package ?? throw new ArgumentNullException(nameof(package));
             commandService = commandService ?? throw new ArgumentNullException(nameof(commandService));
 
             var menuCommandID = new CommandID(CommandSet, CommandId);
-            var menuItem = new MenuCommand(this.Execute, menuCommandID);
+            var menuItem = new OleMenuCommand(this.Execute, menuCommandID);
+            menuItem.BeforeQueryStatus += OnBeforeQueryStatus;
             commandService.AddCommand(menuItem);
 
             this.eventsHandler = eventsHandler;
@@ -54,21 +57,14 @@ namespace VSIXProject1
         /// <summary>
         /// Gets the instance of the command.
         /// </summary>
-        public static EventsTrackingControlCommand Instance
-        {
-            get;
-            private set;
-        }
+        public static EventsTrackingControlCommand Instance { get; private set; }
 
         /// <summary>
         /// Gets the service provider from the owner package.
         /// </summary>
         private Microsoft.VisualStudio.Shell.IAsyncServiceProvider ServiceProvider
         {
-            get
-            {
-                return this.package;
-            }
+            get { return this.package; }
         }
 
         /// <summary>
@@ -79,8 +75,19 @@ namespace VSIXProject1
         {
             await ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync(package.DisposalToken);
 
-            OleMenuCommandService commandService = await package.GetServiceAsync(typeof(IMenuCommandService)) as OleMenuCommandService;
+            OleMenuCommandService commandService =
+                await package.GetServiceAsync(typeof(IMenuCommandService)) as OleMenuCommandService;
             Instance = new EventsTrackingControlCommand(package, commandService, eventsHandler);
+        }
+
+        private void OnBeforeQueryStatus(object sender, EventArgs args)
+        {
+            var cmd = sender as OleMenuCommand;
+            Assumes.Present(cmd);
+            const string en = "En";
+            const string dis = "Dis";
+            var prefix = isTrackingEnabled ? dis : en;
+            cmd.Text = $"{prefix}able solution events tracking";
         }
 
         /// <summary>

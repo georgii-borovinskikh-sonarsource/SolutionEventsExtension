@@ -1,10 +1,7 @@
 ﻿using Microsoft.VisualStudio.Shell;
 using Microsoft.VisualStudio.Shell.Interop;
 using System;
-using System.Threading.Tasks;
 using Microsoft.VisualStudio;
-using EnvDTE;
-using System.Threading;
 
 namespace SolutionEventsExtension
 {
