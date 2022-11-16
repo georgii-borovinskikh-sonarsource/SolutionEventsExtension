@@ -29,8 +29,8 @@ namespace SolutionEventsExtension
     /// </remarks>
     [PackageRegistration(UseManagedResourcesOnly = true, AllowsBackgroundLoading = true)]
     [Guid(PackageGuidString)]
-    // [ProvideAutoLoad(VSConstants.UICONTEXT.SolutionOpening_string, PackageAutoLoadFlags.BackgroundLoad)]
-    [ProvideMenuResource("Menus.ctmenu", 1)]
+    [ProvideAutoLoad(VSConstants.UICONTEXT.SolutionOpening_string, PackageAutoLoadFlags.BackgroundLoad)]
+    [ProvideMenuResource("Menus.ctmenu", 2)]
     public sealed class SolutionEventsExtension : AsyncPackage
     {
         private IVsOutputWindowPane vsOutputWindowPane;
@@ -61,7 +61,8 @@ namespace SolutionEventsExtension
             var solution = (IVsSolution)await GetServiceAsync(typeof(SVsSolution));
             Assumes.Present(solution);
             var eventsHandler = new EventsHandler(solution, vsOutputWindowPane);
-            await VSIXProject1.EventsTrackingControlCommand.InitializeAsync(this, eventsHandler);
+            await EnableEventsTrackingCommand.InitializeAsync(this, eventsHandler);
+            await DisableEventsTrackingCommand.InitializeAsync(this, eventsHandler);
         }
 
         #endregion

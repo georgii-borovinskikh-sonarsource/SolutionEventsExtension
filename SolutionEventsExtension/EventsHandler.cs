@@ -17,10 +17,13 @@ namespace SolutionEventsExtension
         private uint eventsSubscriptionCookie = VSConstants.VSCOOKIE_NIL;
         private readonly IVsOutputWindowPane outputWindowPane;
 
+        public bool IsEnabled => eventsSubscriptionCookie != VSConstants.VSCOOKIE_NIL;
+
         public EventsHandler(IVsSolution solution, IVsOutputWindowPane outputWindowPane)
         {
             this.solution = solution;
             this.outputWindowPane = outputWindowPane;
+            SubscribeToEvents();
         }
 
         public void SubscribeToEvents()
@@ -76,12 +79,14 @@ namespace SolutionEventsExtension
         public int OnBeforeOpeningChildren(IVsHierarchy pHierarchy) =>
             PrintEventMessageAndReturnOk("About to open children");
 
-        public int OnAfterOpeningChildren(IVsHierarchy pHierarchy) => PrintEventMessageAndReturnOk("Opened children");
+        public int OnAfterOpeningChildren(IVsHierarchy pHierarchy) => 
+            PrintEventMessageAndReturnOk("Opened children");
 
         public int OnBeforeClosingChildren(IVsHierarchy pHierarchy) =>
             PrintEventMessageAndReturnOk("Children about to close");
 
-        public int OnAfterClosingChildren(IVsHierarchy pHierarchy) => PrintEventMessageAndReturnOk("Children closed");
+        public int OnAfterClosingChildren(IVsHierarchy pHierarchy) => 
+            PrintEventMessageAndReturnOk("Children closed");
 
         int IVsSolutionEvents3.OnAfterOpenProject(IVsHierarchy pHierarchy, int fAdded) =>
             PrintEventMessageAndReturnOk("Project opened");
@@ -146,7 +151,8 @@ namespace SolutionEventsExtension
         int IVsSolutionEvents.OnAfterCloseSolution(object pUnkReserved) =>
             PrintEventMessageAndReturnOk("Solution closed");
 
-        public int OnAfterRenameProject(IVsHierarchy pHierarchy) => PrintEventMessageAndReturnOk("Project renamed");
+        public int OnAfterRenameProject(IVsHierarchy pHierarchy) => 
+            PrintEventMessageAndReturnOk("Project renamed");
 
         public int OnQueryChangeProjectParent(IVsHierarchy pHierarchy, IVsHierarchy pNewParentHier, ref int pfCancel) =>
             PrintEventMessageAndReturnOk("Project parent change queried");
@@ -167,18 +173,23 @@ namespace SolutionEventsExtension
             uint docCookie) =>
             PrintEventMessageAndReturnOk("Project registered");
 
-        public void OnAfterOpenFolder(string folderPath) => PrintEventMessage("Folder opened");
+        public void OnAfterOpenFolder(string folderPath) => 
+            PrintEventMessage("Folder opened");
 
-        public void OnBeforeCloseFolder(string folderPath) => PrintEventMessage("Folder about to be closed");
+        public void OnBeforeCloseFolder(string folderPath) => 
+            PrintEventMessage("Folder about to be closed");
 
         public void OnQueryCloseFolder(string folderPath, ref int pfCancel) =>
             PrintEventMessage("Folder closing queried");
 
-        public void OnAfterCloseFolder(string folderPath) => PrintEventMessage("Folder closed");
+        public void OnAfterCloseFolder(string folderPath) =>
+            PrintEventMessage("Folder closed");
 
-        public void OnAfterLoadAllDeferredProjects() => PrintEventMessage("Deferred projects loaded");
+        public void OnAfterLoadAllDeferredProjects() => 
+            PrintEventMessage("Deferred projects loaded");
 
-        public void OnAfterRenameSolution(string oldName, string newName) => PrintEventMessage("Solution renamed");
+        public void OnAfterRenameSolution(string oldName, string newName) =>
+            PrintEventMessage("Solution renamed");
 
         private void PrintEventMessage(string message)
         {
