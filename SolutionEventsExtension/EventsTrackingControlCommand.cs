@@ -17,7 +17,7 @@ namespace VSIXProject1
     internal sealed class EventsTrackingControlCommand
     {
         private bool isTrackingEnabled;
-        private EventsHandler eventsHandler;
+        private readonly EventsHandler eventsHandler;
 
         /// <summary>
         /// Command ID.
@@ -58,14 +58,6 @@ namespace VSIXProject1
         /// Gets the instance of the command.
         /// </summary>
         public static EventsTrackingControlCommand Instance { get; private set; }
-
-        /// <summary>
-        /// Gets the service provider from the owner package.
-        /// </summary>
-        private Microsoft.VisualStudio.Shell.IAsyncServiceProvider ServiceProvider
-        {
-            get { return this.package; }
-        }
 
         /// <summary>
         /// Initializes the singleton instance of the command.

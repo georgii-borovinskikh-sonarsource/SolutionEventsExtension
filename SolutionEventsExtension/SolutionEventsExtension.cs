@@ -33,7 +33,6 @@ namespace SolutionEventsExtension
     [ProvideMenuResource("Menus.ctmenu", 1)]
     public sealed class SolutionEventsExtension : AsyncPackage
     {
-        private IVsOutputWindowPane vsOutputWindowPane;
 
         /// <summary>
         /// SolutionEventsExtension GUID string.
@@ -56,7 +55,7 @@ namespace SolutionEventsExtension
             // Do any initialization that requires the UI thread after switching to the UI thread.
             await JoinableTaskFactory.SwitchToMainThreadAsync(cancellationToken);
 
-            vsOutputWindowPane = (IVsOutputWindowPane)await GetServiceAsync(typeof(SVsGeneralOutputWindowPane));
+            var vsOutputWindowPane = (IVsOutputWindowPane)await GetServiceAsync(typeof(SVsGeneralOutputWindowPane));
             Assumes.Present(vsOutputWindowPane);
             var solution = (IVsSolution)await GetServiceAsync(typeof(SVsSolution));
             Assumes.Present(solution);
