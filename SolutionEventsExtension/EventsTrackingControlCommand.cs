@@ -1,10 +1,6 @@
 ﻿using Microsoft.VisualStudio.Shell;
-using Microsoft.VisualStudio.Shell.Interop;
 using System;
 using System.ComponentModel.Design;
-using System.Globalization;
-using System.Threading;
-using System.Threading.Tasks;
 using Microsoft;
 using SolutionEventsExtension;
 using Task = System.Threading.Tasks.Task;
@@ -58,6 +54,7 @@ namespace VSIXProject1
         /// Gets the instance of the command.
         /// </summary>
         public static EventsTrackingControlCommand Instance { get; private set; }
+
 
         /// <summary>
         /// Initializes the singleton instance of the command.
